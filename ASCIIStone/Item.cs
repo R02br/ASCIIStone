@@ -14,6 +14,7 @@ public struct Item
         none,
         ZOMBIE,
         wood,
+        coal,
         stick,
         stone,
         wood_wall,
@@ -25,6 +26,7 @@ public struct Item
         stone_pickaxe,
         stone_axe,
         meat_raw,
+        torch,
     }
 
     public enum ItemTiers
@@ -75,6 +77,7 @@ public class ItemProperty
         {ItemTypes.none, new ItemProperty(itemType: ItemTypes.none, itemName: "", normalChar: ' ')},
         {ItemTypes.ZOMBIE, new ItemProperty(itemType: ItemTypes.ZOMBIE, itemName: "", normalChar: ' ', entityDamage: Zombie.defaultEntityDamage, woodDamage: Zombie.defaultWoodDamage, stoneDamage: Zombie.defaultStoneDamage)},
         {ItemTypes.wood, new ItemProperty(itemType: ItemTypes.wood, itemName: "Wood", normalChar: 'w', maxStack: 20)},
+        {ItemTypes.coal, new ItemProperty(itemType: ItemTypes.coal, itemName: "Coal", normalChar: 'c', maxStack: 20)},
         {ItemTypes.stone, new ItemProperty(itemType: ItemTypes.stone, itemName: "Stone", normalChar: 's', maxStack: 15, entityDamage: MIN_ENTITY_DAMAGE * 1.1f)},
         {ItemTypes.stick, new ItemProperty(itemType: ItemTypes.stick, itemName: "Stick", normalChar: '/', maxStack: 10)},
         {ItemTypes.wood_wall, new ItemProperty(itemType: ItemTypes.wood_wall, itemName: "Wooden Wall", normalChar: 'x', maxStack: 5, itemUsage: ItemUsage.building, tileType: TileTypes.WOOD_WALL)},
@@ -84,7 +87,8 @@ public class ItemProperty
         {ItemTypes.stone_sword, new ItemProperty(itemType: ItemTypes.stone_sword, itemName: "Stone Sword", itemTier: ItemTiers.stone, toolType: ToolTypes.sword, normalChar: 's', normalHealth: 64, entityDamage: 6f, woodDamage: 2f, itemUsage: ItemUsage.malee_weapon)},
         {ItemTypes.stone_pickaxe, new ItemProperty(itemType: ItemTypes.stone_pickaxe, itemName: "Stone Pickaxe", itemTier: ItemTiers.stone, toolType: ToolTypes.pickaxe, normalChar: 'p', normalHealth: 64, entityDamage: MIN_ENTITY_DAMAGE * 2.5f, woodDamage: MIN_WOOD_DAMAGE * 1.5f, stoneDamage: 2f, itemUsage: ItemUsage.tool)},
         {ItemTypes.stone_axe, new ItemProperty(itemType: ItemTypes.stone_axe, itemName: "Stone Axe", itemTier: ItemTiers.stone, toolType: ToolTypes.axe, normalChar: 'a', normalHealth: 64, entityDamage: 3f, woodDamage: 4f, itemUsage: ItemUsage.tool)},
-        {ItemTypes.meat_raw, new ItemProperty(itemType: ItemTypes.meat_raw, itemName: "Raw Meat", normalChar: 'm', maxStack: 10, itemUsage: ItemUsage.consumable, hungerRegeneration: 2f)}
+        {ItemTypes.meat_raw, new ItemProperty(itemType: ItemTypes.meat_raw, itemName: "Raw Meat", normalChar: 'm', maxStack: 10, itemUsage: ItemUsage.consumable, hungerRegeneration: 2f) },
+        {ItemTypes.torch, new ItemProperty(itemType: ItemTypes.torch, itemName: "Torch", normalChar: 'í', maxStack: 20, itemUsage: ItemUsage.building, tileType: TileTypes.TORCH)}
     };
 
     public static ItemProperty GetItemProperty(Item item)

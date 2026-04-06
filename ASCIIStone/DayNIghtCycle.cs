@@ -2,9 +2,9 @@ public static class DayNightCycle
 {
     public static double time;
 
-    public const double dayLength = 60;
-    public const double nightLength = 45;
-    public const double dayToNightFadeTime = 10;
+    public const double dayLength = 180;
+    public const double nightLength = 120;
+    public const double dayToNightFadeTime = 20;
 
     public static float timeBeforeSend = 0f;
     public const float sendRate = 10f;

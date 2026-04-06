@@ -5,6 +5,7 @@
         ROCK,
         WOOD_WALL,
         WATER,
+        TORCH,
     }
 
     public struct Tile
@@ -62,6 +63,11 @@ public class TileProperty
         {TileTypes.ROCK, new TileProperty(TileTypes.ROCK, true, 30f, byte.MaxValue, 0, true, false, '&', 10, DestructibleTypes.STONE, Item.ToolTypes.pickaxe, Item.ItemTiers.wood, new DropLoot(new DropChance[]
         {
             new DropChance(Item.ItemTypes.stone, 1, 5, 1.0, Item.ToolTypes.pickaxe, Item.ItemTiers.wood),
+            new DropChance(Item.ItemTypes.coal, 1, 2, 0.5, Item.ToolTypes.pickaxe, Item.ItemTiers.stone),
+        }))},
+        {TileTypes.TORCH, new TileProperty(TileTypes.TORCH, false, 0f, 0, 5, false, false, 'Í', 1, DestructibleTypes.WOOD, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[]
+        {
+            new DropChance(Item.ItemTypes.torch, 1, 1, 1.0, Item.ToolTypes.none, Item.ItemTiers.none),
         }))}
     };
 

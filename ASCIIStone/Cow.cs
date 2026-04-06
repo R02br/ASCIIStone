@@ -2,7 +2,7 @@ using static Damage;
 
 public static class Cow
 {
-    public const char defaultChar = 'c';
+    public const char defaultChar = 'C';
     public const float defaultHealth = 10f;
     public const float defaultSpeed = 3.5f;
 
