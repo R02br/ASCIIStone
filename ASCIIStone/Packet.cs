@@ -697,7 +697,7 @@ public static class TileModificationPacket
             },
         };
 
-        Game.mainTerrain.ModifyTileAt(tileModification, isHost);
+        Game.mainTerrain.ModifyTileAt(tileModification, true, isHost);
     }
 }
 

@@ -25,8 +25,8 @@ static class Renderer
     private static int topTextRenderOffset = 0;
     private static int bottomTextRenderOffset = 0;
 
-    public static float maxVisibilityRadius = halfScreenWidth;
-    public static float minVisibilityRadius = 10;
+    public static float maxVisibilityRadius = halfScreenWidth + halfScreenHeight;
+    public static float minVisibilityRadius = 1;
 
     public static byte maxOcculisionVisibility = byte.MaxValue;
     public static byte minOcculisionVisibility = 1;

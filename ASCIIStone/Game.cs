@@ -277,6 +277,8 @@ class Game
         {
             entities[entityToCreate.id] = entityToCreate;
         }
+
+        mainTerrain.Update();
     }
 
     private void Render()

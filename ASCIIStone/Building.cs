@@ -19,7 +19,7 @@ public static class Building
                 x = buildingData.tileX,
                 y = buildingData.tileY,
                 tile = TileProperty.tileProperties[buildingData.tileType].CreateDefaultTile(),
-            }, false);
+            }, true, false);
 
             return true;
         }

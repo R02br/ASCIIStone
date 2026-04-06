@@ -5,6 +5,7 @@ public class Terrain
 {
     Tile[,]? tiles;
     public List<TileModification> tileModifications = new List<TileModification>();
+    public List<TileLightUpdate> lightUpdates = new List<TileLightUpdate>();
     public char defaultGround;
     public char defaultEdge;
 
@@ -26,6 +27,7 @@ public class Terrain
         this.defaultEdge = defaultEdge;
 
         tiles = TerrainGenerator.GenerateTerrain(seed, terrainWidth, terrainHeight);
+        UpdateLighting(true);
     }
 
     public Tile? GetTileAt(float x, float y)
@@ -92,10 +94,15 @@ public class Terrain
     }
 
     //represents server or client modifying the tile
-    //actually sends data if client
-    public void ModifyTileAt(TileModification tileModification, bool send)
+    //actually sends data
+    public void ModifyTileAt(TileModification tileModification, bool updateLight, bool send)
     {
         SetTileAt(tileModification.x, tileModification.y, tileModification.tile);
+
+        if (updateLight)
+        {
+            lightUpdates.Add(new TileLightUpdate(tileModification.x, tileModification.y));
+        }
 
         if (!send) return;
 
@@ -156,7 +163,7 @@ public class Terrain
             tile = tiles[damageData.tileX, damageData.tileY],
         };
 
-        ModifyTileAt(tileModification, true);
+        ModifyTileAt(tileModification, true, true);
     }
 
     public bool IsLitAt(int x, int y)
@@ -170,5 +177,84 @@ public class Terrain
         if (tile == null) return false;
 
         return tile.Value.lightLevel > 0;
+    }
+
+    public void Update()
+    {
+        UpdateLighting(false);
+    }
+
+    private void UpdateLighting(bool forceUpdateTerrain)
+    {
+        if (forceUpdateTerrain)
+        {
+            for (int x = 0; x < terrainWidth; x++)
+            {
+                for (int y = 0; y < terrainHeight; y++)
+                {
+                    UpdateLightAt(x, y);
+                }
+            }
+        }
+
+
+        while (lightUpdates.Count > 0)
+        {
+            UpdateLightAt(lightUpdates[0].x, lightUpdates[0].y);
+            lightUpdates.RemoveAt(0);
+        }
+    }
+
+    private void UpdateLightAt(int x, int y)
+    {
+        Tile? tile = GetTileAt(x, y);
+
+        if (tile == null) return;
+
+        int tileEmission = GetTileProperty(tile.Value).lightEmission;
+
+        int maxSurroundingLight = 0;
+
+        Tile? neighborTile;
+
+        neighborTile = GetTileAt(x, y + 1);
+        if (neighborTile != null && !GetTileProperty(neighborTile.Value).blocksLight) maxSurroundingLight = Math.Max(maxSurroundingLight, neighborTile.Value.lightLevel);
+        neighborTile = GetTileAt(x + 1, y);
+        if (neighborTile != null && !GetTileProperty(neighborTile.Value).blocksLight) maxSurroundingLight = Math.Max(maxSurroundingLight, neighborTile.Value.lightLevel);
+        neighborTile = GetTileAt(x, y - 1);
+        if (neighborTile != null && !GetTileProperty(neighborTile.Value).blocksLight) maxSurroundingLight = Math.Max(maxSurroundingLight, neighborTile.Value.lightLevel);
+        neighborTile = GetTileAt(x - 1, y);
+        if (neighborTile != null && !GetTileProperty(neighborTile.Value).blocksLight) maxSurroundingLight = Math.Max(maxSurroundingLight, neighborTile.Value.lightLevel);
+
+        if ((maxSurroundingLight - 1) != tile.Value.lightLevel)
+        {
+            Tile newTile = tile.Value;
+            newTile.lightLevel = (byte)Math.Max(maxSurroundingLight - 1, tileEmission);
+            SetTileAt(x, y, newTile);
+
+            tile = GetTileAt(x, y);
+        }
+
+
+
+        if (tile == null) return;
+
+        UpdateLowerLight(x, y + 1, tile.Value);
+        UpdateLowerLight(x + 1, y, tile.Value);
+        UpdateLowerLight(x, y - 1, tile.Value);
+        UpdateLowerLight(x - 1, y, tile.Value);
+    }
+
+    private void UpdateLowerLight(int x, int y, Tile currentTile)
+    {
+        Tile? neighborTile = GetTileAt(x, y);
+        if (neighborTile != null && ((neighborTile.Value.lightLevel + 1) < currentTile.lightLevel))
+        {
+            TileLightUpdate tileLightUpdate = new TileLightUpdate(x, y);
+            if (!lightUpdates.Contains(tileLightUpdate))
+            {
+                lightUpdates.Add(tileLightUpdate);
+            }
+        }
     }
 }
