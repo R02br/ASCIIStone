@@ -52,22 +52,16 @@ static class Renderer
 
     public static void RenderObjectAt(int localX, int localY, int worldX, int worldY, Terrain? terrain, char c)
     {
-        bool isVisible = IsInVisibilityRadius(localX, localY);
+        bool isInVisibilityRadius = IsInVisibilityRadius(localX, localY);
+        bool isInLineOfSight = IsInLineOfSight(localX, localY);
+        bool isLit = false;
 
-        if (isVisible)
+        if (terrain != null)
         {
-            isVisible = IsInLineOfSight(localX, localY);
+            isLit = terrain.IsLitAt(worldX, worldY);
         }
 
-        if (isVisible)
-        {
-            if (terrain != null)
-            {
-                isVisible = terrain.IsLitAt(worldX, worldY);
-            }
-        }
-
-        RenderAt(localX, localY, isVisible ? c : ' ');
+        RenderAt(localX, localY, isInLineOfSight && (isInVisibilityRadius || isLit) ? c : ' ');
     }
 
     public static void RenderAt(int localX, int localY, char c)

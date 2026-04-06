@@ -14,6 +14,7 @@
         public float health;
         public bool usedOnlyAppropriateTool;
         public Item.ItemTiers lowestTierUsed;
+        public byte lightLevel;
     }
 
     public struct TileModification
@@ -35,26 +36,22 @@ public class TileProperty
     }
 
     public static Dictionary<TileTypes, TileProperty> tileProperties = new Dictionary<TileTypes, TileProperty>
-        {
-        {TileTypes.AIR, new TileProperty(TileTypes.AIR, false, 0f, 0, true, null, -1, DestructibleTypes.NONE, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[] { }))},
-
-        {TileTypes.WATER, new TileProperty(TileTypes.WATER, false, 2f, 0, true, '~', -1, DestructibleTypes.NONE, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[] { }))},
-
-        {TileTypes.WOOD_WALL, new TileProperty(TileTypes.WOOD_WALL, true, 15f, byte.MaxValue / 2, false, '#', 3, DestructibleTypes.WOOD, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[]
+    {
+        {TileTypes.AIR, new TileProperty(TileTypes.AIR, false, 0f, 0, 0, true, null, -1, DestructibleTypes.NONE, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[] { }))},
+        {TileTypes.WATER, new TileProperty(TileTypes.WATER, false, 2f, 0, 0, true, '~', -1, DestructibleTypes.NONE, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[] { }))},
+        {TileTypes.WOOD_WALL, new TileProperty(TileTypes.WOOD_WALL, true, 15f, 0, byte.MaxValue / 2, false, '#', 3, DestructibleTypes.WOOD, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[]
         {
             new DropChance(Item.ItemTypes.wood, 1, 1, 0.5, Item.ToolTypes.axe, Item.ItemTiers.wood)
         }))},
-
-        {TileTypes.TREE, new TileProperty(TileTypes.TREE, true, 10f, byte.MaxValue / 4, false, 'T', 5, DestructibleTypes.WOOD, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[]
+        {TileTypes.TREE, new TileProperty(TileTypes.TREE, true, 10f, byte.MaxValue / 4, 0, false, 'T', 5, DestructibleTypes.WOOD, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[]
         {
             new DropChance(Item.ItemTypes.wood, 1, 3, 1.0, Item.ToolTypes.none, Item.ItemTiers.none)
         }))},
-
-        {TileTypes.ROCK, new TileProperty(TileTypes.ROCK, true, 30f, byte.MaxValue, false, '&', 10, DestructibleTypes.STONE, Item.ToolTypes.pickaxe, Item.ItemTiers.wood, new DropLoot(new DropChance[]
+        {TileTypes.ROCK, new TileProperty(TileTypes.ROCK, true, 30f, byte.MaxValue, 0, false, '&', 10, DestructibleTypes.STONE, Item.ToolTypes.pickaxe, Item.ItemTiers.wood, new DropLoot(new DropChance[]
         {
             new DropChance(Item.ItemTypes.stone, 1, 5, 1.0, Item.ToolTypes.pickaxe, Item.ItemTiers.wood),
         }))}
-        };
+    };
 
     public static TileProperty GetTileProperty(Tile tile)
     {
@@ -65,6 +62,7 @@ public class TileProperty
     public bool hasCollision;
     public float pathCost;
     public byte occulisionStrength;
+    public byte lightEmission;
     public bool isBuildableOn;
     public char? normalChar;
 
@@ -74,12 +72,13 @@ public class TileProperty
     public Item.ItemTiers minTier;
     public DropLoot dropLoot;
 
-    public TileProperty(TileTypes tileType, bool hasCollision, float pathCost, byte occulisionStrength, bool isBuildableOn, char? normalChar, int normalHealth, DestructibleTypes destructibleType, Item.ToolTypes toolType, Item.ItemTiers minTier, DropLoot dropLoot)
+    public TileProperty(TileTypes tileType, bool hasCollision, float pathCost, byte occulisionStrength, byte lightEmission, bool isBuildableOn, char? normalChar, int normalHealth, DestructibleTypes destructibleType, Item.ToolTypes toolType, Item.ItemTiers minTier, DropLoot dropLoot)
     {
         this.tileType = tileType;
         this.hasCollision = hasCollision;
         this.pathCost = pathCost;
         this.occulisionStrength = occulisionStrength;
+        this.lightEmission = lightEmission;
         this.isBuildableOn = isBuildableOn;
         this.normalChar = normalChar;
         this.normalHealth = normalHealth;

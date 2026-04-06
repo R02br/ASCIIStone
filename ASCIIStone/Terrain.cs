@@ -164,8 +164,11 @@ public class Terrain
         if (x < 0 || x >= terrainWidth) return false;
         if (y < 0 || y >= terrainHeight) return false;
 
-        return true;
 
-        //TODO: add lighting
+        Tile? tile = GetTileAt(x, y);
+
+        if (tile == null) return false;
+
+        return tile.Value.lightLevel > 0;
     }
 }
