@@ -1,6 +1,6 @@
-public static class Occulision
+public static class Occlusion
 {
-    public static byte[,] CalculateOcculision(Terrain terrain, int camX, int camY, int halfBufferWidth, int halfBufferHeight)
+    public static byte[,] CalculateOcclusion(Terrain terrain, int camX, int camY, int halfBufferWidth, int halfBufferHeight)
     {
         int bufferWidth = halfBufferWidth * 2;
         int bufferHeight = halfBufferHeight * 2;
@@ -17,20 +17,20 @@ public static class Occulision
 
         for (int x = 0; x < bufferWidth; x++)
         {
-            CastOcculusionRay(terrain, camX, camY, halfBufferWidth, halfBufferHeight, x, 0, ref visibilityBuffer, bufferWidth, bufferHeight, halfBufferWidth, halfBufferHeight);
-            CastOcculusionRay(terrain, camX, camY, halfBufferWidth, halfBufferHeight, x, bufferHeight - 1, ref visibilityBuffer, bufferWidth, bufferHeight, halfBufferWidth, halfBufferHeight);
+            CastOcclusionRay(terrain, camX, camY, halfBufferWidth, halfBufferHeight, x, 0, ref visibilityBuffer, bufferWidth, bufferHeight, halfBufferWidth, halfBufferHeight);
+            CastOcclusionRay(terrain, camX, camY, halfBufferWidth, halfBufferHeight, x, bufferHeight - 1, ref visibilityBuffer, bufferWidth, bufferHeight, halfBufferWidth, halfBufferHeight);
         }
 
         for (int y = 0; y < bufferWidth; y++)
         {
-            CastOcculusionRay(terrain, camX, camY, halfBufferWidth, halfBufferHeight, 0, y, ref visibilityBuffer, bufferWidth, bufferHeight, halfBufferWidth, halfBufferHeight);
-            CastOcculusionRay(terrain, camX, camY, halfBufferWidth, halfBufferHeight, bufferWidth - 1, y, ref visibilityBuffer, bufferWidth, bufferHeight, halfBufferWidth, halfBufferHeight);
+            CastOcclusionRay(terrain, camX, camY, halfBufferWidth, halfBufferHeight, 0, y, ref visibilityBuffer, bufferWidth, bufferHeight, halfBufferWidth, halfBufferHeight);
+            CastOcclusionRay(terrain, camX, camY, halfBufferWidth, halfBufferHeight, bufferWidth - 1, y, ref visibilityBuffer, bufferWidth, bufferHeight, halfBufferWidth, halfBufferHeight);
         }
 
         return visibilityBuffer;
     }
 
-    public static void CastOcculusionRay(Terrain terrain, int camX, int camY, int startX, int startY, int destinationX, int destinationY, ref byte[,] visibilityBuffer, int bufferWidth, int bufferHeight, int halfBufferWidth, int halfBufferHeight)
+    public static void CastOcclusionRay(Terrain terrain, int camX, int camY, int startX, int startY, int destinationX, int destinationY, ref byte[,] visibilityBuffer, int bufferWidth, int bufferHeight, int halfBufferWidth, int halfBufferHeight)
     {
         float fx = startX;
         float fy = startY;

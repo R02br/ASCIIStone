@@ -5,7 +5,7 @@ using System.Text;
 static class Renderer
 {
     public static bool forceRedraw = false;
-    public static bool recalculateOcculusion = true;
+    public static bool recalculateOcclusion = true;
 
     public const int screenWidth = 100;
     public const int screenHeight = 30;
@@ -20,7 +20,7 @@ static class Renderer
 
     private static char[,] renderBuffer = new char[screenWidth, screenHeight];
     private static char[,] renderBackBuffer = new char[screenWidth, screenHeight];
-    private static byte[,] occulisionBuffer = new byte[screenWidth, screenHeight];
+    private static byte[,] occlusionBuffer = new byte[screenWidth, screenHeight];
 
     private static int topTextRenderOffset = 0;
     private static int bottomTextRenderOffset = 0;
@@ -45,7 +45,7 @@ static class Renderer
             {
                 renderBuffer[x, y] = ' ';
                 renderBackBuffer[x, y] = ' ';
-                occulisionBuffer[x, y] = 0;
+                occlusionBuffer[x, y] = 0;
             }
         }
     }
@@ -170,15 +170,16 @@ static class Renderer
 
         double visibility = minOcculisionVisibility + (maxOcculisionVisibility - minOcculisionVisibility) * ((DayNightCycle.GetDayLevel() + 1) * 0.5);
 
-        return occulisionBuffer[x, y] < Math.Floor(visibility);
+        return occlusionBuffer[x, y] < Math.Floor(visibility);
     }
 
     public static void RecalculateOcculusion(Terrain terrain, int camX, int camY)
     {
-        if (recalculateOcculusion)
+        if (recalculateOcclusion)
         {
-            occulisionBuffer = Occulision.CalculateOcculision(terrain, camX, camY, halfScreenWidth, halfScreenHeight);
-            recalculateOcculusion = true;
+            occlusionBuffer = Occlusion.CalculateOcclusion(terrain, camX, camY, halfScreenWidth, halfScreenHeight);
+            //the performance wasn't as much of a problem as I thougth, so i left it to recalculate every frame
+            recalculateOcclusion = true;
         }
     }
 
