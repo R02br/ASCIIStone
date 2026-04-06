@@ -13,7 +13,7 @@
         while (isRunning)
         {
             game.Update();
-            //Thread.Sleep(16);
+            Thread.Sleep(16);
         }
     }
     

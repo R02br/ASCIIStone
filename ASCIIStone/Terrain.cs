@@ -5,7 +5,8 @@ public class Terrain
 {
     Tile[,]? tiles;
     public List<TileModification> tileModifications = new List<TileModification>();
-    public List<TileLightUpdate> lightUpdates = new List<TileLightUpdate>();
+    public Queue<TileLightUpdate> lightUpdates = new Queue<TileLightUpdate>();
+    public HashSet<TileLightUpdate> isInLightUpdates = new HashSet<TileLightUpdate>();
     public char defaultGround;
     public char defaultEdge;
 
@@ -101,7 +102,11 @@ public class Terrain
 
         if (updateLight)
         {
-            lightUpdates.Add(new TileLightUpdate(tileModification.x, tileModification.y));
+            lightUpdates.Enqueue(new TileLightUpdate(tileModification.x, tileModification.y));
+            lightUpdates.Enqueue(new TileLightUpdate(tileModification.x, tileModification.y + 1));
+            lightUpdates.Enqueue(new TileLightUpdate(tileModification.x + 1, tileModification.y));
+            lightUpdates.Enqueue(new TileLightUpdate(tileModification.x, tileModification.y - 1));
+            lightUpdates.Enqueue(new TileLightUpdate(tileModification.x - 1, tileModification.y));
         }
 
         if (!send) return;
@@ -197,11 +202,12 @@ public class Terrain
             }
         }
 
+        TileLightUpdate tileLightUpdate;
 
-        while (lightUpdates.Count > 0)
+        while (lightUpdates.TryDequeue(out tileLightUpdate))
         {
-            UpdateLightAt(lightUpdates[0].x, lightUpdates[0].y);
-            lightUpdates.RemoveAt(0);
+            isInLightUpdates.Remove(tileLightUpdate);
+            UpdateLightAt(tileLightUpdate.x, tileLightUpdate.y);
         }
     }
 
@@ -211,50 +217,110 @@ public class Terrain
 
         if (tile == null) return;
 
-        int tileEmission = GetTileProperty(tile.Value).lightEmission;
+        TileProperty tileProperty = GetTileProperty(tile.Value);
 
-        int maxSurroundingLight = 0;
+        int light = 0;
+        int startLight = tile.Value.lightLevel;
 
-        Tile? neighborTile;
-
-        neighborTile = GetTileAt(x, y + 1);
-        if (neighborTile != null && !GetTileProperty(neighborTile.Value).blocksLight) maxSurroundingLight = Math.Max(maxSurroundingLight, neighborTile.Value.lightLevel);
-        neighborTile = GetTileAt(x + 1, y);
-        if (neighborTile != null && !GetTileProperty(neighborTile.Value).blocksLight) maxSurroundingLight = Math.Max(maxSurroundingLight, neighborTile.Value.lightLevel);
-        neighborTile = GetTileAt(x, y - 1);
-        if (neighborTile != null && !GetTileProperty(neighborTile.Value).blocksLight) maxSurroundingLight = Math.Max(maxSurroundingLight, neighborTile.Value.lightLevel);
-        neighborTile = GetTileAt(x - 1, y);
-        if (neighborTile != null && !GetTileProperty(neighborTile.Value).blocksLight) maxSurroundingLight = Math.Max(maxSurroundingLight, neighborTile.Value.lightLevel);
-
-        if ((maxSurroundingLight - 1) != tile.Value.lightLevel)
+        if (tileProperty.lightEmission > 0)
         {
-            Tile newTile = tile.Value;
-            newTile.lightLevel = (byte)Math.Max(maxSurroundingLight - 1, tileEmission);
-            SetTileAt(x, y, newTile);
-
-            tile = GetTileAt(x, y);
+            SetLightAt(x, y, tileProperty.lightEmission);
+            startLight = tileProperty.lightEmission;
         }
 
+        int lightUp = TryGetLightFromTile(x, y + 1, ref light);
+        int lightRight = TryGetLightFromTile(x + 1, y, ref light);
+        int lightDown = TryGetLightFromTile(x, y - 1, ref light);
+        int lightLeft = TryGetLightFromTile(x - 1, y, ref light);
 
+        if (light > startLight)
+        {
+            light = Math.Max(light - 1, 0);
+            SetLightAt(x, y, light);
+            light--;
+            if (light > 0)
+            {
+                if (tileProperty.blocksLight) return;
+
+                if (light > lightUp) AddLightToUpdate(x, y + 1);
+                if (light > lightRight) AddLightToUpdate(x + 1, y);
+                if (light > lightDown) AddLightToUpdate(x, y - 1);
+                if (light > lightLeft) AddLightToUpdate(x - 1, y);
+            }
+        }
+        else
+        {
+            if (tileProperty.lightEmission > 0)
+            {
+                TryPropagateLightTo(x, y + 1, startLight);
+                TryPropagateLightTo(x + 1, y, startLight);
+                TryPropagateLightTo(x, y - 1, startLight);
+                TryPropagateLightTo(x - 1, y, startLight);
+            }
+            else
+            {
+                light = Math.Max(light - 1, 0);
+                SetLightAt(x, y, light);
+
+                if (lightUp > 0) AddLightToUpdate(x, y + 1);
+                if (lightRight > 0) AddLightToUpdate(x + 1, y);
+                if (lightDown > 0) AddLightToUpdate(x, y - 1);
+                if (lightLeft > 0) AddLightToUpdate(x - 1, y);
+            }
+        }
+    }
+
+
+    //returns light at tile but overwrites currentMaxLight only if tile isn't blocking it (light propagates to solid tiles but not from solid tiles)
+    private int TryGetLightFromTile(int x, int y, ref int currentMaxLight)
+    {
+        Tile? tile = GetTileAt(x, y);
+
+        if (tile == null) return 0;
+
+        TileProperty tileProperty = GetTileProperty(tile.Value);
+
+        if (!tileProperty.blocksLight)
+        {
+            currentMaxLight = Math.Max(currentMaxLight, tile.Value.lightLevel);
+        }
+
+        return tile.Value.lightLevel;
+    }
+
+    private void TryPropagateLightTo(int x, int y, int lightLevel)
+    {
+        if (x < 0 || x >= terrainWidth || y < 0 || y >= terrainHeight) return;
+
+        Tile? tile = GetTileAt(x, y);
 
         if (tile == null) return;
 
-        UpdateLowerLight(x, y + 1, tile.Value);
-        UpdateLowerLight(x + 1, y, tile.Value);
-        UpdateLowerLight(x, y - 1, tile.Value);
-        UpdateLowerLight(x - 1, y, tile.Value);
+        TileProperty tileProperty = GetTileProperty(tile.Value);
+
+        if (lightLevel > tileProperty.lightEmission)
+        {
+            AddLightToUpdate(x, y);
+        }
     }
 
-    private void UpdateLowerLight(int x, int y, Tile currentTile)
+    private void SetLightAt(int x, int y, int lightLevel)
     {
-        Tile? neighborTile = GetTileAt(x, y);
-        if (neighborTile != null && ((neighborTile.Value.lightLevel + 1) < currentTile.lightLevel))
-        {
-            TileLightUpdate tileLightUpdate = new TileLightUpdate(x, y);
-            if (!lightUpdates.Contains(tileLightUpdate))
-            {
-                lightUpdates.Add(tileLightUpdate);
-            }
-        }
+        if (x < 0 || x >= terrainWidth || y < 0 || y >= terrainHeight) return;
+        if (tiles == null) return;
+
+        tiles[x, y].lightLevel = (byte)lightLevel;
+    }
+
+    private void AddLightToUpdate(int x, int y)
+    {
+        if (x < 0 || x >= terrainWidth || y < 0 || y >= terrainHeight) return;
+
+        TileLightUpdate tileLightUpdate = new TileLightUpdate(x, y);
+
+        if (isInLightUpdates.Contains(tileLightUpdate)) return;
+
+        lightUpdates.Enqueue(tileLightUpdate);
+        isInLightUpdates.Add(tileLightUpdate);
     }
 }
