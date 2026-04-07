@@ -65,6 +65,8 @@ public static class Player
         }
         else
         {
+            if (DebugMenu.isInDebugMenu) return;
+
             if (Input.GetKeyDown(ConsoleKey.E))
             {
                 Inventory.isInInventory = !Inventory.isInInventory;
@@ -130,6 +132,8 @@ public static class Player
 
     public static void UpdateMovement(Entity entity)
     {
+        if (DebugMenu.isInDebugMenu) return;
+
         float inputX = 0;
         float inputY = 0;
 

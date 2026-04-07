@@ -52,7 +52,7 @@ public class TileProperty
     {
         {TileTypes.AIR, new TileProperty(TileTypes.AIR, false, 0f, 0, 0, false, true, null, -1, DestructibleTypes.NONE, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[] { }))},
         {TileTypes.WATER, new TileProperty(TileTypes.WATER, false, 2f, 0, 0, false, true, '~', -1, DestructibleTypes.NONE, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[] { }))},
-        {TileTypes.WOOD_WALL, new TileProperty(TileTypes.WOOD_WALL, true, 15f, byte.MaxValue / 2, 0, false, false, '#', 3, DestructibleTypes.WOOD, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[]
+        {TileTypes.WOOD_WALL, new TileProperty(TileTypes.WOOD_WALL, true, 15f, byte.MaxValue / 2, 0, true, false, '#', 3, DestructibleTypes.WOOD, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[]
         {
             new DropChance(Item.ItemTypes.wood, 1, 1, 0.5, Item.ToolTypes.axe, Item.ItemTiers.wood)
         }))},
@@ -65,7 +65,7 @@ public class TileProperty
             new DropChance(Item.ItemTypes.stone, 1, 5, 1.0, Item.ToolTypes.pickaxe, Item.ItemTiers.wood),
             new DropChance(Item.ItemTypes.coal, 1, 2, 0.5, Item.ToolTypes.pickaxe, Item.ItemTiers.stone),
         }))},
-        {TileTypes.TORCH, new TileProperty(TileTypes.TORCH, false, 0f, 0, 5, false, false, 'Í', 1, DestructibleTypes.WOOD, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[]
+        {TileTypes.TORCH, new TileProperty(TileTypes.TORCH, false, 0f, 0, 7, false, false, 'Í', 1, DestructibleTypes.WOOD, Item.ToolTypes.none, Item.ItemTiers.none, new DropLoot(new DropChance[]
         {
             new DropChance(Item.ItemTypes.torch, 1, 1, 1.0, Item.ToolTypes.none, Item.ItemTiers.none),
         }))}

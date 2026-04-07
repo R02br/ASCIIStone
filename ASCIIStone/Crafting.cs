@@ -27,6 +27,8 @@ public static class Crafting
         new CraftingRecipe(new Ingredient(ItemTypes.stone_sword, 1), new Ingredient(ItemTypes.stone, 10), new Ingredient(ItemTypes.stick, 1)),
         new CraftingRecipe(new Ingredient(ItemTypes.stone_pickaxe, 1), new Ingredient(ItemTypes.stone, 10), new Ingredient(ItemTypes.stick, 1)),
         new CraftingRecipe(new Ingredient(ItemTypes.stone_axe, 1), new Ingredient(ItemTypes.stone, 10), new Ingredient(ItemTypes.stick, 1)),
+
+        new CraftingRecipe(new Ingredient(ItemTypes.torch, 1), new Ingredient(ItemTypes.stick, 1), new Ingredient(ItemTypes.coal, 2)),
     };
 
     public static void ListLeft()
@@ -51,17 +53,20 @@ public static class Crafting
 
     public static void CraftSelected()
     {
-        foreach (Ingredient ingredient in craftingRecipes[selectedCraft].ingredients)
+        if (!DebugMenu.infiniteCrafting)
         {
-            if (Inventory.CountItem(ingredient.itemType) < ingredient.count)
+            foreach (Ingredient ingredient in craftingRecipes[selectedCraft].ingredients)
             {
-                return;
+                if (Inventory.CountItem(ingredient.itemType) < ingredient.count)
+                {
+                    return;
+                }
             }
-        }
 
-        foreach (Ingredient ingredient in craftingRecipes[selectedCraft].ingredients)
-        {
-            Inventory.RemoveItem(ingredient.itemType, ingredient.count);
+            foreach (Ingredient ingredient in craftingRecipes[selectedCraft].ingredients)
+            {
+                Inventory.RemoveItem(ingredient.itemType, ingredient.count);
+            }
         }
 
         Ingredient result = craftingRecipes[selectedCraft].result;

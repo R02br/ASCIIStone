@@ -14,6 +14,16 @@ public static class DayNightCycle
         time = 0f;
     }
 
+    public static void SetDay()
+    {
+        time = dayToNightFadeTime;
+    }
+
+    public static void SetNight()
+    {
+        time = dayLength + dayToNightFadeTime;
+    }
+
     public static void Update()
     {
         time += Game.deltaTime;

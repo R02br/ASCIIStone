@@ -3,7 +3,7 @@ using static Item;
 
 public static class Inventory
 {
-    const int inventorySize = 5;
+    const int inventorySize = 7;
     public static Item[] items = new Item[inventorySize];
 
     public static bool isInInventory = false;

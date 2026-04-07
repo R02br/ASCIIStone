@@ -86,6 +86,8 @@ class Game
         Inventory.ResetInventory();
 
         gameState = GameStates.MainMenu;
+
+        DebugMenu.ResetDebugMenu();
     }
 
     private void HostGame()
@@ -157,9 +159,9 @@ class Game
 
                     char output = ConsoleInput.GetCharFromConsole(allowedChars);
 
-                    if (output == '1') { gameState = GameStates.HostOrJoin; }
-                    if (output == '2') { gameState = GameStates.Settings; }
-                    if (output == '3') { Program.isRunning = false; }
+                    if (output == '1') gameState = GameStates.HostOrJoin;
+                    if (output == '2') gameState = GameStates.Settings;
+                    if (output == '3') Program.isRunning = false;
                 }
                 else if (gameState == GameStates.HostOrJoin)
                 {
@@ -167,9 +169,9 @@ class Game
 
                     char output = ConsoleInput.GetCharFromConsole(allowedChars);
 
-                    if (output == '1') { HostGame(); }
-                    if (output == '2') { JoinGame(); }
-                    if (output == '3') { QuitToMenu(); }
+                    if (output == '1') HostGame();
+                    if (output == '2') JoinGame();
+                    if (output == '3') QuitToMenu();
                 }
                 else if (gameState == GameStates.HostMenu)
                 {
@@ -206,8 +208,8 @@ class Game
 
                     char output = ConsoleInput.GetCharFromConsole(allowedChars);
 
-                    if (output == '1') { gameState = GameStates.PlayerCustomization; }
-                    if (output == '2') { QuitToMenu(); }
+                    if (output == '1') gameState = GameStates.PlayerCustomization;
+                    if (output == '2') QuitToMenu();
                 }
                 else if (gameState == GameStates.PlayerCustomization)
                 {
@@ -253,13 +255,25 @@ class Game
             QuitToMenu();
         }
 
+        if (Input.GetKeyDown(ConsoleKey.X))
+        {
+            if (Program.isDebugMode && NetworkManager.isHost)
+            {
+                DebugMenu.isInDebugMenu = !DebugMenu.isInDebugMenu;
+                DebugMenu.debugState = DebugMenu.DebugStates.MainMenu;
+                DebugMenu.selectedOption = 0;
+            }
+        }
+
         if (gameState != GameStates.Game) return;
 
-        DayNightCycle.Update();
+        if (DebugMenu.isInDebugMenu) DebugMenu.Update();
+
+        if (DebugMenu.isDayNightCycleActive) DayNightCycle.Update();
 
         if (NetworkManager.isHost)
         {
-            MobSpawner.Update();
+            if (DebugMenu.areMobSpawningActive) MobSpawner.Update();
         }
 
         foreach (Entity entity in entities.Values)
@@ -287,7 +301,11 @@ class Game
 
         if (entities.TryGetValue(Player.myPlayerId, out Entity? localPlayer))
         {
-            if (localPlayer.health > 0)
+            if (DebugMenu.isInDebugMenu)
+            {
+                Renderer.RenderTextFromTopLeft(DebugMenu.GetFormatedDebugMenu());
+            }
+            else if (localPlayer.health > 0)
             {
                 if (Inventory.isInInventory)
                 {
