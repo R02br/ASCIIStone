@@ -34,6 +34,11 @@ public static class Zombie
         SendData(entity);
     }
 
+    public static void Die(Entity entity, Damage.DamageData? damageData = null)
+    {
+        //TODO: add zombie loot
+    }
+
     public static void Movement(Entity entity)
     {
         float leastDistance = float.PositiveInfinity;

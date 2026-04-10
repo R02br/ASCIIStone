@@ -327,21 +327,16 @@ public class Entity
 
             if (NetworkManager.isHost)
             {
-                ItemProperty itemProperty = ItemProperty.itemProperties[damageData.itemType];
-
                 switch (entityType)
                 {
                     case EntityTypes.Player:
-                        if (id == Player.myPlayerId)
-                        {
-                            Inventory.DropEverything(x, y);
-                        }
+                        Player.Die(this, damageData);
                         break;
                     case EntityTypes.Zombie:
-                        //TODO: add zombie loot
+                        Zombie.Die(this, damageData);
                         break;
                     case EntityTypes.Cow:
-                        DropEntityLoot(Cow.defaultDropLoot, itemProperty.toolType, itemProperty.itemTier);
+                        Cow.Die(this, damageData);
                         break;
                 }
 
@@ -355,7 +350,7 @@ public class Entity
             }
         }
     }
-    
+
     public void DropEntityLoot(DropLoot dropLoot, Item.ToolTypes itemToolType, Item.ItemTiers itemTier)
     {
         Item[] items = dropLoot.GetLoot(itemToolType, itemTier);

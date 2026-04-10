@@ -277,10 +277,18 @@ public static class Player
             //player just died of starvation
             if (entity.health <= 0f)
             {
-                entity.health = 0f;
-
-                Inventory.DropEverything(entity.x, entity.y);
+                Die(entity);
             }
+        }
+    }
+
+    public static void Die(Entity entity, Damage.DamageData? damageData = null)
+    {
+        entity.health = 0f;
+
+        if (entity.id == myPlayerId)
+        {
+            Inventory.DropEverything(entity.x, entity.y);
         }
     }
 

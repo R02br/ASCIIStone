@@ -30,6 +30,21 @@ public static class Cow
         SendData(entity);
     }
 
+    public static void Die(Entity entity, DamageData? damageData = null)
+    {
+        ItemProperty itemProperty;
+        if (damageData != null)
+        {
+            itemProperty = ItemProperty.itemProperties[damageData.Value.itemType];
+        }
+        else
+        {
+            itemProperty = ItemProperty.itemProperties[Item.ItemTypes.none];
+        }
+
+        entity.DropEntityLoot(Cow.defaultDropLoot, itemProperty.toolType, itemProperty.itemTier);
+    }
+
     public static void Movement(Entity entity)
     {
 

@@ -375,7 +375,7 @@ public static class EntityHealth
             {
                 if (entity.health > 0 && health <= 0)
                 {
-                    Inventory.DropEverything(entity.x, entity.y);
+                    Player.Die(entity);
                 }
             }
         }
