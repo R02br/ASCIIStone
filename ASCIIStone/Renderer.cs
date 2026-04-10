@@ -249,7 +249,7 @@ static class Renderer
         switch (Game.gameState)
         {
             case Game.GameStates.MainMenu:
-                Console.WriteLine("ASCII Stone\n");
+                Console.WriteLine($"ASCII Stone V{Program.version}\n");
                 Console.WriteLine("1. Play");
                 Console.WriteLine("2. Settings");
                 Console.WriteLine("3. Quit");

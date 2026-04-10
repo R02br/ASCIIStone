@@ -1,5 +1,7 @@
 ﻿class Program
 {
+    public static string version = "1.0"; 
+
     public static bool isRunning = true;
     public static bool isDebugMode = false;
 
