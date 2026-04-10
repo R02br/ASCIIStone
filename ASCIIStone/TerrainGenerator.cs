@@ -1,5 +1,3 @@
-using static TileProperty;
-
 public static class TerrainGenerator
 {
     public const float MIN_RIVER_START_ANGLE = -1.0f;
@@ -16,7 +14,7 @@ public static class TerrainGenerator
         {
             for (int y = 0; y < terrainHeight; y++)
             {
-                tiles[x, y] = tileProperties[TileTypes.AIR].CreateDefaultTile();
+                tiles[x, y] = TileProperty.tileProperties[TileTypes.AIR].CreateDefaultTile();
             }
         }
 
@@ -68,7 +66,7 @@ public static class TerrainGenerator
                 {
                     int size = random.Next(3, 15);
 
-                    tiles = FillCircle(tiles, terrainWidth, terrainHeight, x, y, size, tileProperties[TileTypes.TREE].CreateDefaultTile(), chanceInPatch, random);
+                    tiles = FillCircle(tiles, terrainWidth, terrainHeight, x, y, size, TileProperty.tileProperties[TileTypes.TREE].CreateDefaultTile(), chanceInPatch, random);
                 }
             }
         }
@@ -94,7 +92,7 @@ public static class TerrainGenerator
                         offsetX += random.Next(-5, 6);
                         offsetY += random.Next(-5, 6);
 
-                        tiles = FillCircle(tiles, terrainWidth, terrainHeight, x + offsetX, y + offsetY, size, tileProperties[TileTypes.ROCK].CreateDefaultTile(), 1.0, null);
+                        tiles = FillCircle(tiles, terrainWidth, terrainHeight, x + offsetX, y + offsetY, size, TileProperty.tileProperties[TileTypes.ROCK].CreateDefaultTile(), 1.0, null);
                     }
                 }
             }
@@ -157,7 +155,7 @@ public static class TerrainGenerator
     {
         while (riverX >= 0 && riverX < terrainWidth && riverY >= 0 && riverY < terrainWidth)
         {
-            tiles = FillCircle(tiles, terrainWidth, terrainHeight, (int)MathF.Floor(riverX), (int)MathF.Floor(riverY), 2, tileProperties[TileTypes.WATER].CreateDefaultTile(), 1.0, null);
+            tiles = FillCircle(tiles, terrainWidth, terrainHeight, (int)MathF.Floor(riverX), (int)MathF.Floor(riverY), 2, TileProperty.tileProperties[TileTypes.WATER].CreateDefaultTile(), 1.0, null);
 
             riverX += MathF.Sin(riverDirection);
             riverY += MathF.Cos(riverDirection);

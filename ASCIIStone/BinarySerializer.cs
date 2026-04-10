@@ -1,5 +1,4 @@
 using System.Text;
-using static Packet;
 
 static class BinarySerializer
 {

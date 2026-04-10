@@ -1,10 +1,8 @@
-using static Item;
-
 public static class Damage
 {
     public struct DamageData
     {
-        public ItemTypes itemType;
+        public Item.ItemTypes itemType;
         public bool hasAttacker;
         public uint attackerId;
 

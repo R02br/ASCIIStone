@@ -1,5 +1,3 @@
-using static Damage;
-
 public static class Cow
 {
     public const char defaultChar = 'C';
@@ -30,7 +28,7 @@ public static class Cow
         SendData(entity);
     }
 
-    public static void Die(Entity entity, DamageData? damageData = null)
+    public static void Die(Entity entity, Damage.DamageData? damageData = null)
     {
         ItemProperty itemProperty;
         if (damageData != null)

@@ -1,6 +1,4 @@
 using System.Text;
-using static Item;
-using static ItemProperty;
 
 public static class Crafting
 {
@@ -16,19 +14,19 @@ public static class Crafting
 
     public static CraftingRecipe[] craftingRecipes = new CraftingRecipe[]
     {
-        new CraftingRecipe(new Ingredient(ItemTypes.stick, 2), new Ingredient(ItemTypes.wood, 1)),
+        new CraftingRecipe(new Ingredient(Item.ItemTypes.stick, 2), new Ingredient(Item.ItemTypes.wood, 1)),
 
-        new CraftingRecipe(new Ingredient(ItemTypes.wood_wall, 1), new Ingredient(ItemTypes.wood, 2)),
+        new CraftingRecipe(new Ingredient(Item.ItemTypes.wood_wall, 1), new Ingredient(Item.ItemTypes.wood, 2)),
 
-        new CraftingRecipe(new Ingredient(ItemTypes.wood_sword, 1), new Ingredient(ItemTypes.wood, 10), new Ingredient(ItemTypes.stick, 1)),
-        new CraftingRecipe(new Ingredient(ItemTypes.wood_pickaxe, 1), new Ingredient(ItemTypes.wood, 10), new Ingredient(ItemTypes.stick, 1)),
-        new CraftingRecipe(new Ingredient(ItemTypes.wood_axe, 1), new Ingredient(ItemTypes.wood, 10), new Ingredient(ItemTypes.stick, 1)),
+        new CraftingRecipe(new Ingredient(Item.ItemTypes.wood_sword, 1), new Ingredient(Item.ItemTypes.wood, 10), new Ingredient(Item.ItemTypes.stick, 1)),
+        new CraftingRecipe(new Ingredient(Item.ItemTypes.wood_pickaxe, 1), new Ingredient(Item.ItemTypes.wood, 10), new Ingredient(Item.ItemTypes.stick, 1)),
+        new CraftingRecipe(new Ingredient(Item.ItemTypes.wood_axe, 1), new Ingredient(Item.ItemTypes.wood, 10), new Ingredient(Item.ItemTypes.stick, 1)),
 
-        new CraftingRecipe(new Ingredient(ItemTypes.stone_sword, 1), new Ingredient(ItemTypes.stone, 10), new Ingredient(ItemTypes.stick, 1)),
-        new CraftingRecipe(new Ingredient(ItemTypes.stone_pickaxe, 1), new Ingredient(ItemTypes.stone, 10), new Ingredient(ItemTypes.stick, 1)),
-        new CraftingRecipe(new Ingredient(ItemTypes.stone_axe, 1), new Ingredient(ItemTypes.stone, 10), new Ingredient(ItemTypes.stick, 1)),
+        new CraftingRecipe(new Ingredient(Item.ItemTypes.stone_sword, 1), new Ingredient(Item.ItemTypes.stone, 10), new Ingredient(Item.ItemTypes.stick, 1)),
+        new CraftingRecipe(new Ingredient(Item.ItemTypes.stone_pickaxe, 1), new Ingredient(Item.ItemTypes.stone, 10), new Ingredient(Item.ItemTypes.stick, 1)),
+        new CraftingRecipe(new Ingredient(Item.ItemTypes.stone_axe, 1), new Ingredient(Item.ItemTypes.stone, 10), new Ingredient(Item.ItemTypes.stick, 1)),
 
-        new CraftingRecipe(new Ingredient(ItemTypes.torch, 1), new Ingredient(ItemTypes.stick, 1), new Ingredient(ItemTypes.coal, 2)),
+        new CraftingRecipe(new Ingredient(Item.ItemTypes.torch, 1), new Ingredient(Item.ItemTypes.stick, 1), new Ingredient(Item.ItemTypes.coal, 2)),
     };
 
     public static void ListLeft()
@@ -71,7 +69,7 @@ public static class Crafting
 
         Ingredient result = craftingRecipes[selectedCraft].result;
 
-        ItemProperty itemProperty = itemProperties[result.itemType];
+        ItemProperty itemProperty = ItemProperty.itemProperties[result.itemType];
 
         Item item = itemProperty.CreateDefaultItem(result.count);
 
@@ -86,7 +84,7 @@ public static class Crafting
 
         CraftingRecipe craftingRecipe = craftingRecipes[selectedCraft];
 
-        ItemProperty itemProperty = itemProperties[craftingRecipe.result.itemType];
+        ItemProperty itemProperty = ItemProperty.itemProperties[craftingRecipe.result.itemType];
 
         string itemToCraft = $"{itemProperty.itemName} {craftingRecipe.result.count}X (You have {Inventory.CountItem(craftingRecipe.result.itemType)}) <- ";
 
@@ -101,7 +99,7 @@ public static class Crafting
 
         foreach (Ingredient ingredient in craftingRecipe.ingredients)
         {
-            itemProperty = itemProperties[ingredient.itemType];
+            itemProperty = ItemProperty.itemProperties[ingredient.itemType];
 
             if (i != 0)
             {

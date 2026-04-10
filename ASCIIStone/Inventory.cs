@@ -1,5 +1,4 @@
 using System.Text;
-using static Item;
 
 public static class Inventory
 {
@@ -13,7 +12,7 @@ public static class Inventory
     {
         for (int i = 0; i < items.Length; i++)
         {
-            items[i] = empty;
+            items[i] = Item.empty;
         }
 
         isInInventory = false;
@@ -45,7 +44,7 @@ public static class Inventory
 
         StringBuilder s = new StringBuilder("---");
 
-        if (items[index].itemType != ItemTypes.none)
+        if (items[index].itemType != Item.ItemTypes.none)
         {
             ItemProperty itemProperty = ItemProperty.GetItemProperty(items[index]);
 
@@ -118,14 +117,14 @@ public static class Inventory
 
             if ((--items[selectedSlot].count) <= 0)
             {
-                items[selectedSlot] = empty;
+                items[selectedSlot] = Item.empty;
             }
         }
         else
         {
             DropItem(x, y, items[selectedSlot]);
 
-            items[selectedSlot] = empty;
+            items[selectedSlot] = Item.empty;
         }
     }
 
@@ -176,7 +175,7 @@ public static class Inventory
 
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i].itemType == ItemTypes.none)
+            if (items[i].itemType == Item.ItemTypes.none)
             {
                 items[i] = item;
                 items[i].count = remaining;
@@ -199,7 +198,7 @@ public static class Inventory
 
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i].itemType == ItemTypes.none)
+            if (items[i].itemType == Item.ItemTypes.none)
             {
                 return true;
             }
@@ -227,7 +226,7 @@ public static class Inventory
         return false;
     }
 
-    public static int CountItem(ItemTypes itemType)
+    public static int CountItem(Item.ItemTypes itemType)
     {
         int count = 0;
 
@@ -242,7 +241,7 @@ public static class Inventory
         return count;
     }
 
-    public static void RemoveItem(ItemTypes itemType, int count)
+    public static void RemoveItem(Item.ItemTypes itemType, int count)
     {
         for (int i = items.Length - 1; i >= 0; i--)
         {
@@ -251,7 +250,7 @@ public static class Inventory
                 if (count >= items[i].count)
                 {
                     count -= items[i].count;
-                    items[i] = empty;
+                    items[i] = Item.empty;
 
                     if (count <= 0)
                     {
@@ -286,10 +285,10 @@ public static class Inventory
     {
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i].itemType != ItemTypes.none)
+            if (items[i].itemType != Item.ItemTypes.none)
             {
                 DropItem(x, y, items[i]);
-                items[i] = empty;
+                items[i] = Item.empty;
             }
         }
     }

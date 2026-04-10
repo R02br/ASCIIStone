@@ -1,12 +1,10 @@
-using static Item;
-
 public static class Building
 {
     public struct BuildingData
     {
         public int tileX;
         public int tileY;
-        public ItemTypes itemType;
+        public Item.ItemTypes itemType;
         public TileTypes tileType;
     }
 

@@ -1,6 +1,3 @@
-using static Tile;
-using static TileProperty;
-
 public class Terrain
 {
     Tile[,]? tiles;
@@ -132,7 +129,7 @@ public class Terrain
         TileProperty tileProperty = TileProperty.GetTileProperty(tiles[damageData.tileX, damageData.tileY]);
         ItemProperty itemProperty = ItemProperty.itemProperties[damageData.itemType];
 
-        if (tileProperty.destructibleType == DestructibleTypes.NONE) return;
+        if (tileProperty.destructibleType == TileProperty.DestructibleTypes.NONE) return;
 
         usedDurability = true;
 
@@ -140,9 +137,9 @@ public class Terrain
 
         float damage = 0f;
 
-        if (tileProperty.destructibleType == DestructibleTypes.ENTITY) { damage = itemProperty.entityDamage; }
-        if (tileProperty.destructibleType == DestructibleTypes.WOOD) { damage = itemProperty.woodDamage; }
-        if (tileProperty.destructibleType == DestructibleTypes.STONE) { damage = itemProperty.stoneDamage; }
+        if (tileProperty.destructibleType == TileProperty.DestructibleTypes.ENTITY) { damage = itemProperty.entityDamage; }
+        if (tileProperty.destructibleType == TileProperty.DestructibleTypes.WOOD) { damage = itemProperty.woodDamage; }
+        if (tileProperty.destructibleType == TileProperty.DestructibleTypes.STONE) { damage = itemProperty.stoneDamage; }
 
         tiles[damageData.tileX, damageData.tileY].health -= damage;
         bool isAppropriateTool = tileProperty.toolType == Item.ToolTypes.none || (tileProperty.toolType == itemProperty.toolType);
@@ -156,7 +153,7 @@ public class Terrain
         {
             tiles[damageData.tileX, damageData.tileY].health = 0;
 
-            SpawnTileDrop(tiles[damageData.tileX, damageData.tileY].tileType, damageData.tileX, damageData.tileY, tiles[damageData.tileX, damageData.tileY].usedOnlyAppropriateTool ? itemProperty.toolType : Item.ToolTypes.none, tiles[damageData.tileX, damageData.tileY].lowestTierUsed);
+            TileProperty.SpawnTileDrop(tiles[damageData.tileX, damageData.tileY].tileType, damageData.tileX, damageData.tileY, tiles[damageData.tileX, damageData.tileY].usedOnlyAppropriateTool ? itemProperty.toolType : Item.ToolTypes.none, tiles[damageData.tileX, damageData.tileY].lowestTierUsed);
 
             SetTileAt(damageData.tileX, damageData.tileY, TileProperty.tileProperties[TileTypes.AIR].CreateDefaultTile());
         }
@@ -217,7 +214,7 @@ public class Terrain
 
         if (tile == null) return;
 
-        TileProperty tileProperty = GetTileProperty(tile.Value);
+        TileProperty tileProperty = TileProperty.GetTileProperty(tile.Value);
 
         int light = 0;
         int startLight = tile.Value.lightLevel;
@@ -278,7 +275,7 @@ public class Terrain
 
         if (tile == null) return 0;
 
-        TileProperty tileProperty = GetTileProperty(tile.Value);
+        TileProperty tileProperty = TileProperty.GetTileProperty(tile.Value);
 
         if (!tileProperty.blocksLight)
         {
@@ -296,7 +293,7 @@ public class Terrain
 
         if (tile == null) return;
 
-        TileProperty tileProperty = GetTileProperty(tile.Value);
+        TileProperty tileProperty = TileProperty.GetTileProperty(tile.Value);
 
         if (lightLevel > tileProperty.lightEmission)
         {

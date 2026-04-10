@@ -1,6 +1,3 @@
-using static Game;
-using static Damage;
-
 public class Entity
 {
     public static Dictionary<uint, Path> paths = new Dictionary<uint, Path>();
@@ -28,11 +25,11 @@ public class Entity
     {
         if (instantSpawn)
         {
-            entities[entity.id] = entity;
+            Game.entities[entity.id] = entity;
         }
         else
         {
-            entitiesToCreate.Enqueue(entity);
+            Game.entitiesToCreate.Enqueue(entity);
         }
     }
 
@@ -57,7 +54,7 @@ public class Entity
 
     private static void RemoveEntity(uint id)
     {
-        entitiesToDestroy.Enqueue(id);
+        Game.entitiesToDestroy.Enqueue(id);
     }
 
     public static void SpawnEntityInTerrain(Entity entity, Terrain terrain)
@@ -312,7 +309,7 @@ public class Entity
         return defaultValue;
     }
 
-    public void Damage(float damage, DamageData damageData)
+    public void Damage(float damage, Damage.DamageData damageData)
     {
         health -= damage;
 
